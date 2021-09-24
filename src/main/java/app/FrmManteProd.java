@@ -13,6 +13,7 @@ import model.Usuario;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.persistence.TypedQuery;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.util.List;
@@ -138,7 +139,30 @@ public class FrmManteProd extends JFrame {
 	}
 	
 	void listado() {
+		   //.1 Especificar la conexion de BD-DAOFactory
+				EntityManagerFactory fabrica = Persistence.createEntityManagerFactory("mysql");
+				
+				//2. Obtener el DAO
+				EntityManager em = fabrica.createEntityManager();
+				
 		
+				//Listado de PArametros -> Lisatdo de usuarios por tipo
+				// "Select * from tb_usuarios where tipo = ?
+				String sql = "Select u from Usuario u where u.tipo = :xtipo";
+		        TypedQuery<Usuario> query3 = em.createQuery(sql,Usuario.class);
+		        query3.setParameter("xtipo",1);
+				
+				List<Usuario> lstUsuarios3 = query3.getResultList();
+				
+				    System.out.println("Cantidad de Usuarios : "+ lstUsuarios3.size());
+					System.out.println("-- Listado de Usuarios tipo 1 --");
+					for(Usuario u : lstUsuarios3) {
+						System.out.println(">>>" + u);		
+					}
+				
+
+				//u.setCodigo(10);
+				em.close();
 	}
 	
 	void registrar() {
